@@ -5,14 +5,14 @@
 
 namespace Server
 {
-    sf::IpAddress PongServer::ipAddress = "192.168.0.11";
+    sf::IpAddress PongServer::ipAddress = "127.0.0.1";
+    uint16_t PongServer::port = 50'000;
 
     void PongServer::launch()
     {
         std::cout << "Server launched\n";
         m_exeThread = std::make_unique<std::thread>([&]()
         {
-            m_socket.bind(50'001);
             unsigned ticks = 0;
 
             const sf::Time MS_PER_UPDATE = sf::seconds(0.016);// Ticks/ updates per second
@@ -33,8 +33,11 @@ namespace Server
                     ticks++;
                     m_ball.position += m_ball.velocity;
 
-                    unsigned short port = 50'000;
+
                     sf::Packet sendPacket;
+
+                    std::cout << "Pos: " << m_ball.position.x << " " << m_ball.position.y << "\n";
+
                     sendPacket << m_ball.position.x << m_ball.position.y;
                     m_socket.send(sendPacket, ipAddress, port);
                     m_ball.update();

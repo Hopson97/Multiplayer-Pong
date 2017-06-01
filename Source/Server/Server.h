@@ -14,6 +14,7 @@ namespace Server
     {
         public:
             static sf::IpAddress ipAddress;
+            static uint16_t port;
 
             void launch();
 

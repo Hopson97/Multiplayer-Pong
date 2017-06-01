@@ -14,7 +14,7 @@ struct Client
 
     Client()
     {
-        if (socket.bind(50'000) == sf::Socket::Done)
+        if (socket.bind(Server::PongServer::port) == sf::Socket::Done)
         {
             std::cout << "Connected.\n";
         }
@@ -52,6 +52,7 @@ int main()
 
     sf::RenderWindow window({1280, 720}, "Pong");
     Client client;
+
     client.socket.setBlocking(false);
 
     window.setFramerateLimit(60);
@@ -73,15 +74,16 @@ int main()
 
         sf::Packet packetRec;
         sf::Vector2<int16_t> ballPosition;
-        uint16_t recievePort;
+        uint16_t receivePort;
 
         client.socket.receive(packetRec,
                               Server::PongServer::ipAddress,
-                              recievePort);
+                              receivePort);
 
-        if (packetRec >> ballPosition.x >> ballPosition.y)
+
+        packetRec >> ballPosition.x >> ballPosition.y;
         {
-            std::cout << ballPosition.x << " " << ballPosition.y <<"\n";
+            //std::cout << ballPosition.x << " " << ballPosition.y <<"\n";
             ballSprite.setPosition(ballPosition.x, ballPosition.y);
         }
 
