@@ -5,21 +5,21 @@
 
 namespace Server
 {
-    sf::IpAddress PongServer::ip = "192.168.0.11";
+    sf::IpAddress PongServer::ipAddress = "192.168.0.11";
 
     void PongServer::launch()
     {
-        std::cout << "Launched Server.\n";
-
-        unsigned ticks = 0;
-
-        const sf::Time MS_PER_UPDATE = sf::seconds(0.05);//20 Ticks/ updates per second
-        sf::Clock gameTimer;
-
-        auto lastTime = gameTimer.getElapsedTime();
-        auto updateLag = sf::Time::Zero;
+        std::cout << "Server launched\n";
         m_exeThread = std::make_unique<std::thread>([&]()
         {
+            unsigned ticks = 0;
+
+            const sf::Time MS_PER_UPDATE = sf::seconds(0.05);//20 Ticks/ updates per second
+            sf::Clock gameTimer;
+
+            auto lastTime = gameTimer.getElapsedTime();
+            auto updateLag = sf::Time::Zero;
+
             while (m_isRunning)
             {
                 auto current = gameTimer.getElapsedTime();
@@ -35,7 +35,7 @@ namespace Server
                     unsigned short port = 50'000;
                     sf::Packet sendPacket;
                     sendPacket << m_ball.position.x << m_ball.position.y;
-                    m_socket.send(sendPacket, ip, port);
+                    m_socket.send(sendPacket, ipAddress, port);
                     m_ball.update();
                     updateLag -= MS_PER_UPDATE;
                 }

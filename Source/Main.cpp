@@ -54,8 +54,7 @@ int main()
     Client client;
     client.socket.setBlocking(false);
 
-
-    window.setFramerateLimit(60);
+    window.setFramerateLimit(30);
 
     sf::RectangleShape ballSprite;
     ballSprite.setSize({50, 50});
@@ -76,21 +75,20 @@ int main()
         sf::Vector2<int16_t> ballPosition;
         uint16_t recievePort;
 
-        if (client.socket.receive(packetRec, Server::PongServer::ip, recievePort)
-            == sf::Socket::Done)
+        client.socket.receive(packetRec,
+                              Server::PongServer::ipAddress,
+                              recievePort);
+
+        if (packetRec >> ballPosition.x >> ballPosition.y)
         {
-            if (packetRec >> ballPosition.x >> ballPosition.y)
-            {
-                ballSprite.setPosition(ballPosition.x, ballPosition.y);
-            }
+            std::cout << ballPosition.x << " " << ballPosition.y <<"\n";
+            ballSprite.setPosition(ballPosition.x, ballPosition.y);
         }
 
         window.clear();
         window.draw(ballSprite);
         window.display();
-
     }
-
 }
 
 

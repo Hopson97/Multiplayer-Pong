@@ -13,7 +13,7 @@ namespace Server
     class PongServer
     {
         public:
-            static sf::IpAddress ip;
+            static sf::IpAddress ipAddress;
 
             void launch();
 
@@ -22,12 +22,11 @@ namespace Server
         private:
             std::unique_ptr<std::thread> m_exeThread;
 
-            bool m_isRunning = true;
 
             Ball m_ball;
-
             sf::UdpSocket m_socket;
 
+            bool m_isRunning = true;
     };
 }
 
