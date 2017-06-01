@@ -52,12 +52,15 @@ int main()
     }
 
     Client client;
-    sf::RenderWindow window({1280, 720}, "Pong");
-    sf::RectangleShape shape;
-    shape.setSize({50, 50});
     client.socket.setBlocking(false);
 
-    sf::Packet p;
+    sf::RenderWindow window({1280, 720}, "Pong");
+    window.setFramerateLimit(60);
+
+    sf::RectangleShape ballSprite;
+    ballSprite.setSize({50, 50});
+
+
     while (window.isOpen())
     {
         sf::Event e;
@@ -69,19 +72,21 @@ int main()
             }
         }
 
-        int16_t x, y;
-        uint16_t port;
+        sf::Packet packetRec;
+        sf::Vector2<int16_t> ballPosition;
+        uint16_t recievePort;
 
-        if (client.socket.receive(p, Server::PongServer::ip, port) == sf::Socket::Done)
+        if (client.socket.receive(packetRec, Server::PongServer::ip, recievePort)
+            == sf::Socket::Done)
         {
-            if (p >> x >> y)
+            if (packetRec >> ballPosition.x >> ballPosition.y)
             {
-                shape.setPosition(x, y);
+                ballSprite.setPosition(ballPosition.x, ballPosition.y);
             }
         }
 
         window.clear();
-        window.draw(shape);
+        window.draw(ballSprite);
         window.display();
 
     }

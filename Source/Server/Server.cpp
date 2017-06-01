@@ -34,9 +34,9 @@ namespace Server
                     m_ball.position += m_ball.velocity;
 
                     unsigned short port = 50'000;
-                    sf::Packet packet;
-                    packet << m_ball.position.x << m_ball.position.y;
-                    m_socket.send(packet, ip, port);
+                    sf::Packet sendPacket;
+                    sendPacket << m_ball.position.x << m_ball.position.y;
+                    m_socket.send(sendPacket, ip, port);
                     m_ball.update();
                     lag -= MS_PER_UPDATE;
                 }
