@@ -11,26 +11,25 @@ namespace Server
     {
         std::cout << "Launched Server.\n";
 
+        unsigned ticks = 0;
+
+        const sf::Time MS_PER_UPDATE = sf::seconds(0.05);//20 Ticks/ updates per second
         sf::Clock gameTimer;
 
-        auto MS_PER_UPDATE = 0.05; //20 Ticks/ updates per second
-
-        float lastTime = gameTimer.getElapsedTime().asSeconds();
-        float lag = 0.0f;
-
-        float current = gameTimer.getElapsedTime().asSeconds();
-        float elapsed = current - lastTime;
-        lastTime = current;
-
-        m_socket.setBlocking(false);
-
-
+        auto lastTime = gameTimer.getElapsedTime();
+        auto updateLag = sf::Time::Zero;
         m_exeThread = std::make_unique<std::thread>([&]()
         {
             while (m_isRunning)
             {
-                while (lag >= MS_PER_UPDATE)
+                auto current = gameTimer.getElapsedTime();
+                auto elapsed = current - lastTime;
+                lastTime = current;
+                updateLag += elapsed;
+
+                while (updateLag >= MS_PER_UPDATE)
                 {
+                    ticks++;
                     m_ball.position += m_ball.velocity;
 
                     unsigned short port = 50'000;
@@ -38,7 +37,7 @@ namespace Server
                     sendPacket << m_ball.position.x << m_ball.position.y;
                     m_socket.send(sendPacket, ip, port);
                     m_ball.update();
-                    lag -= MS_PER_UPDATE;
+                    updateLag -= MS_PER_UPDATE;
                 }
             }
         });

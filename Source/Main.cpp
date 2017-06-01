@@ -19,7 +19,6 @@ struct Client
             std::cout << "Connected.\n";
         }
     }
-
 };
 
 int main()
@@ -51,10 +50,11 @@ int main()
             break;
     }
 
+    sf::RenderWindow window({1280, 720}, "Pong");
     Client client;
     client.socket.setBlocking(false);
 
-    sf::RenderWindow window({1280, 720}, "Pong");
+
     window.setFramerateLimit(60);
 
     sf::RectangleShape ballSprite;
@@ -92,25 +92,5 @@ int main()
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
