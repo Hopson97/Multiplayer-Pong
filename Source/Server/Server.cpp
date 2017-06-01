@@ -22,6 +22,9 @@ namespace Server
         float elapsed = current - lastTime;
         lastTime = current;
 
+        m_socket.setBlocking(false);
+
+
         m_exeThread = std::make_unique<std::thread>([&]()
         {
             while (m_isRunning)
@@ -43,7 +46,10 @@ namespace Server
 
     PongServer::~PongServer()
     {
-        m_isRunning = false;
-        m_exeThread->join();
+        if (m_exeThread)
+        {
+            m_isRunning = false;
+            m_exeThread->join();
+        }
     }
 }

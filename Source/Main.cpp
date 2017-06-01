@@ -55,7 +55,9 @@ int main()
     sf::RenderWindow window({1280, 720}, "Pong");
     sf::RectangleShape shape;
     shape.setSize({50, 50});
+    client.socket.setBlocking(false);
 
+    sf::Packet p;
     while (window.isOpen())
     {
         sf::Event e;
@@ -68,13 +70,14 @@ int main()
         }
 
         int16_t x, y;
-        sf::Packet p;
         uint16_t port;
-        client.socket.receive(p, Server::PongServer::ip, port);
 
-        if (p >> x >> y)
+        if (client.socket.receive(p, Server::PongServer::ip, port) == sf::Socket::Done)
         {
-            shape.setPosition(x, y);
+            if (p >> x >> y)
+            {
+                shape.setPosition(x, y);
+            }
         }
 
         window.clear();
