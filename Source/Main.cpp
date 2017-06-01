@@ -14,7 +14,7 @@ struct Client
 
     Client()
     {
-        if (socket.bind(50000) == sf::Socket::Done)
+        if (socket.bind(50'000) == sf::Socket::Done)
         {
             std::cout << "Connected.\n";
         }
@@ -54,7 +54,7 @@ int main()
     Client client;
     client.socket.setBlocking(false);
 
-    window.setFramerateLimit(30);
+    window.setFramerateLimit(60);
 
     sf::RectangleShape ballSprite;
     ballSprite.setSize({50, 50});

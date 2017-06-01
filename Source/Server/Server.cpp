@@ -12,9 +12,10 @@ namespace Server
         std::cout << "Server launched\n";
         m_exeThread = std::make_unique<std::thread>([&]()
         {
+            m_socket.bind(50'001);
             unsigned ticks = 0;
 
-            const sf::Time MS_PER_UPDATE = sf::seconds(0.05);//20 Ticks/ updates per second
+            const sf::Time MS_PER_UPDATE = sf::seconds(0.016);// Ticks/ updates per second
             sf::Clock gameTimer;
 
             auto lastTime = gameTimer.getElapsedTime();
