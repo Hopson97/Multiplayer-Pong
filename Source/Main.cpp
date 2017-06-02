@@ -14,7 +14,7 @@ struct Client
 
     Client()
     {
-        if (socket.bind(Server::PongServer::port) == sf::Socket::Done)
+        if (socket.bind(50'000) == sf::Socket::Done)
         {
             std::cout << "Connected.\n";
         }
@@ -62,6 +62,7 @@ int main()
 
 
     sf::Vector2f paddlePosition;
+    sf::Vector2f lastPos;
     while (window.isOpen())
     {
         sf::Event e;
@@ -85,14 +86,17 @@ int main()
 
 
         sf::Packet sendPacket;
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+        Controls controls;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
         {
-            sendPacket << "D";
+            controls = Controls::Up;
         }
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
         {
-            sendPacket << "W";
+            controls = Controls::Down;
         }
+
+        sendPacket << (uint16_t)controls;
         client.socket.send(sendPacket, address, 50'001);
 
         packetRec >> paddlePosition.x >> paddlePosition.y;

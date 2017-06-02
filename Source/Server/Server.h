@@ -8,19 +8,26 @@
 
 #include "Paddle.h"
 
+enum class Controls
+{
+    None,
+    Up,
+    Down
+};
+
 namespace Server
 {
     class PongServer
     {
         public:
-            static sf::IpAddress ipAddress;
-            static uint16_t port;
-
             void launch();
 
             ~PongServer();
 
         private:
+
+            void handleRequests();
+
             std::unique_ptr<std::thread> m_exeThread;
 
 
