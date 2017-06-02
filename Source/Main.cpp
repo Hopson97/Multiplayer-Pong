@@ -58,9 +58,10 @@ int main()
     window.setFramerateLimit(60);
 
     sf::RectangleShape ballSprite;
-    ballSprite.setSize({50, 50});
+    ballSprite.setSize({50, 200});
 
 
+    sf::Vector2f paddlePosition;
     while (window.isOpen())
     {
         sf::Event e;
@@ -73,18 +74,30 @@ int main()
         }
 
         sf::Packet packetRec;
-        sf::Vector2<int16_t> ballPosition;
+
         uint16_t receivePort;
 
+        sf::IpAddress address;
         client.socket.receive(packetRec,
-                              Server::PongServer::ipAddress,
+                              address,
                               receivePort);
 
 
-        packetRec >> ballPosition.x >> ballPosition.y;
+
+        sf::Packet sendPacket;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
         {
-            //std::cout << ballPosition.x << " " << ballPosition.y <<"\n";
-            ballSprite.setPosition(ballPosition.x, ballPosition.y);
+            sendPacket << "D";
+        }
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+        {
+            sendPacket << "W";
+        }
+        client.socket.send(sendPacket, address, 50'001);
+
+        packetRec >> paddlePosition.x >> paddlePosition.y;
+        {
+            ballSprite.setPosition(paddlePosition.x, paddlePosition.y);
         }
 
         window.clear();

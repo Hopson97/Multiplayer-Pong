@@ -6,7 +6,7 @@
 #include <memory>
 #include <thread>
 
-#include "Ball.h"
+#include "Paddle.h"
 
 namespace Server
 {
@@ -24,7 +24,7 @@ namespace Server
             std::unique_ptr<std::thread> m_exeThread;
 
 
-            Ball m_ball;
+            Paddle m_paddle;
             sf::UdpSocket m_socket;
 
             bool m_isRunning = true;
